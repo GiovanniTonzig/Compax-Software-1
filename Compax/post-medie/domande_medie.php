@@ -8,34 +8,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="post_medie.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxy/1.6.1/scripts/jquery.ajaxy.min.js" integrity="sha512-bztGAvCE/3+a1Oh0gUro7BHukf6v7zpzrAb3ReWAVrt+bVNNphcl2tDTKCBr5zk7iEDmQ2Bv401fX3jeVXGIcA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
     <title>Domande medie</title>
+    </head>
     <script src="./post_medie.js"></script>
     <script>
 
         var domande = []
         var risposte = []
-        
-        $.ajax({
+       
+        const promise1 =  $.ajax({
             url: "../php/queryDomandeMedie.php",
             type: "POST",
             contentType: "application/json; charset=utf-8",
             success: function(data) 
             {
                 domande = JSON.parse(data)
+             
             }
         });
-
-        $.ajax({
+        const promise2 =  $.ajax({
             url: "../php/queryRisposteMedie.php",
             type: "POST",
             contentType: "application/json; charset=utf-8",
             success: function(data) 
             {
                 risposte = JSON.parse(data)
-                setTimeout(generaForm(), 100)
+                
             }
         });
+
+        Promise.all([promise1, promise2]).then(function(response1, response2) {
+        generaForm()
+        });
+
+       
+
+       
+        
 
         function generaForm()
         {
@@ -75,15 +85,70 @@
             scrollbar-base-color: #2da8ff;
             scrollbar-arrow-color: #CCCCCC;
             scrollbar-track-color: #CCCCCC;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding-top: 60px;
+            overflow-x: hidden;
+
+        }
+
+        .divForm{
+        width:1000px;  
+        display:flex; 
+        justify-content:column; 
+        margin-left: auto; 
+        }
+
+        .paragrafo{
+            display:flex;
+            padding-top:20px;
+            
+            font-family: 'Poppins', sans-serif;
+            font-weight: bold;
+            font-size: 1.5rem;
+           
+        }
+
+        .risultatiMedie{
+            margin: 20px;
+            padding: 5px;
+            display: flex;
+            border-radius: 4%;
+            text-align: center;
+            border-color: red;
+        
+        }
+
+        .diploma{
+            width: 15%;
+             position: absolute;
+            top: 10%;
+            right: 1%;
+            transform: rotate(10deg);
+        }
+
+        button{   
+        padding: 12px 24px;
+        font-size: 16px;
+        color: white;
+        background-color: #0063AC;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+        }
+
+        button:hover {
+         background-color: #4398D7;
         }
     </style>
-</head>
+
 
 <body>
     <section>
-        <div class="bar">
-            <div class="width"></div>
-        </div>
+        
 
         <!--<img src="../img/cappelloViola.png" alt="" class="cappelloViola">-->
         <img src="../img/diploma.png" alt="" class="diploma">
@@ -91,22 +156,23 @@
 
         <form class="form" method="POST" action="risultati_medie.php">
             <div class="header">
-                <div>Benvenuto</div>
-                <input type="text" name="nomeStudente" value="<?php echo $_POST["nomeStudente"]?>">
-                <div>
-                    Frequentante la scuola 
-                    <input type="text" name="scuole" value="<?php echo $_POST["scuole"]?>">
-                    di 
-                    <input type="text" name="comuni" value="<?php echo $_POST["comuni"]?>">
-                    in procincia di
-                    <input type="text" name="provincie" value="<?php echo $_POST["provincie"]?>">
-                    ,
-                    <input type="text" name="regioni" value="<?php echo $_POST["regioni"]?>">
+            <div>Benvenuto</div>
+                <input type="text" style="border-color: red;" class='risultatiMedie' name="nomeStudente" value="<?php echo $_POST["nomeStudente"]?>" readonly>
+                <div class="divForm">
+                    <p class='paragrafo'>Scuola </p> 
+                    <input type="text" class='risultatiMedie'  name="scuole" value="<?php echo $_POST["scuole"]?>" readonly>
+                    <p class='paragrafo'>di</p> 
+                    <input type="text" class='risultatiMedie' name="comuni" value="<?php echo $_POST["comuni"]?>" readonly>
+                    <p class='paragrafo'> Provincia</p>
+                    <input type="text" class='risultatiMedie' name="provincie" value="<?php echo $_POST["provincie"]?>"readonly>
+                    <p class='paragrafo'>,</p>
+                    <input type="text" class='risultatiMedie' name="regioni" value="<?php echo $_POST["regioni"]?>"readonly>
                 </div>
+                <hr>
                 <div class="content">
                 </div>
                 <submit>
-                    <button>
+                    <button class='bottone'>
                         Invia
                     </button>
                 </submit>
