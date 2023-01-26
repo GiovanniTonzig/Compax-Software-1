@@ -107,7 +107,7 @@ select:focus{
 .diploma{
     width: 15%;
     position: absolute;
-    top: 30%;
+    top: 10%;
     right: 1%;
     transform: rotate(10deg);
 }
